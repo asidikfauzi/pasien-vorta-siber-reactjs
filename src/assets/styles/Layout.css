@@ -1,0 +1,51 @@
+main {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+}
+
+aside {
+  height: 100vh;
+  width: 15vw;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #F7FAFC;
+}
+
+aside img {
+  width: 80%;
+  align-self: center;
+}
+
+.right-side {
+  height: 100vh;
+  width: 85vw;
+  background-color: #F7FAFC;
+}
+
+.layout-tab {
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-tab a {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+.layout-tab a:hover {
+  background-color: #F4EBD8;
+}
+
+.layout-tab a.active {
+  background-color: #F4EBD8;
+  font-weight: bold;
+}
+
+.child {
+  padding: 2rem;
+  height: calc(100vh - 5rem);
+}

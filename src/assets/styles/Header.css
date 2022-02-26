@@ -1,0 +1,24 @@
+nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+    background-color: white;
+}
+
+nav img {
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+nav .header-location{
+    width: 15rem;
+    padding: 0.40rem 0.40rem;
+    color: black;
+    outline: none;
+    border: 1px solid #C0C0C0;
+    border-radius: 0.20rem;
+}
