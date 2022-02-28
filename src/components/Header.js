@@ -1,5 +1,8 @@
 import React from 'react'
+
+import imgprofil from "../assets/images/profil.PNG";
 import '../assets/styles/Header.css'
+
 
 function Header() {
   return (
@@ -13,7 +16,7 @@ function Header() {
             <option value="-">Other</option>
           </select>
       </div>
-      <img src='/logo192.png' alt='photo'></img>
+      <img src={imgprofil} alt="profile"></img>
     </nav>
   )
 }

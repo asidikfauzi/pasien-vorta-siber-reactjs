@@ -11,9 +11,11 @@ function Layout({ children }) {
         <img src={img} alt="logo"></img>
         <i class="bi bi-people-fill">User</i>
         <div className="layout-tab">
-          <a>Tenaga Medis</a>
-          <a className="active">Pasien</a>
-          <a>Daftar User</a>
+          <a href="/">Tenaga Medis</a>
+          <a href="/" className="active">
+            Pasien
+          </a>
+          <a href="/">Daftar User</a>
         </div>
       </aside>
       <section className="right-side">
