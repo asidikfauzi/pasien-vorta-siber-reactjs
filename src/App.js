@@ -15,10 +15,22 @@ function App() {
   const [lokasiData, setLokasiData] = useState([]);
   const [reload, setReload] = useState(false);
   const [shownModal, setShownModal] = useState(false);
+  const [shownAccModal, setShownAccModal] = useState(false);
+  const [body, setBody] = useState({});
+  const [date, setDate] = useState(null);
+  const [time, setTime] = useState(null);
 
-  const onChange = (date) => {
-    console.log(date.toString());
-  }
+  const dateHandler = (date) => {
+    const waktu = moment(date).format("YYYY-MM-DD");
+    setDate(waktu);
+    // console.log(moment(date).format("DD-MM-YYYY"));
+  };
+
+  const timeHandler = (e) => {
+    setTime(e.target.value);
+    // setBody({ ...body, waktu: `${date} ${e.target.value}` });
+    // console.log(e.target.value);
+  };
 
   const showModal = () => {
     setShownModal(true);
@@ -28,7 +40,14 @@ function App() {
     setShownModal(false);
   };
 
-  
+  const showAccModal = () => {
+    setShownAccModal(true);
+  };
+
+  const hideAccModal = () => {
+    setShownAccModal(false);
+  };
+
   useEffect(() => {
     axios
       .get("http://localhost:3000/pasien")
@@ -229,11 +248,11 @@ function App() {
                 <option value="Eyelash Variant 3">Eyelash Variant 3</option>
                 <option value="Eyelash Variant 4">Eyelash Variant 4</option>
               </select>
-              
-              <DatePicker onChange={onChange}/>
+              <b className="mt-3 mb-2">Tanggal </b>
+              <DatePicker onChange={dateHandler} />
             </div>
             <div className="right-modal">
-              <b className="mt-3 mb-3">Lokasi</b>
+              <b className="mt-3 mb-2">Lokasi</b>
               <select name="example" className="combo-modal">
                 {lokasiData.length > 0 &&
                   lokasiData.map((lokasi, idx) => (
@@ -244,14 +263,14 @@ function App() {
                 ;
               </select>
               <b className="mt-3 mb-2">Waktu</b>
-              <form className="waktu">
+              <form onChange={timeHandler} className="waktu">
                 {/* <div role="group">
                 </div> */}
                 <input
                   type="radio"
                   className="btn-check"
                   name="waktu"
-                  value="12.30"
+                  value="12:30"
                   id="option1"
                 />
                 <label className="btn btn-outline-secondary" for="option1">
@@ -262,7 +281,7 @@ function App() {
                   type="radio"
                   className="btn-check"
                   name="waktu"
-                  value="13.00"
+                  value="13:00"
                   id="option2"
                 />
                 <label className="btn btn-outline-secondary" for="option2">
@@ -273,7 +292,7 @@ function App() {
                   type="radio"
                   className="btn-check"
                   name="waktu"
-                  value="13.30"
+                  value="13:30"
                   id="option3"
                 />
                 <label className="btn btn-outline-secondary" for="option3">
@@ -284,7 +303,7 @@ function App() {
                   type="radio"
                   className="btn-check"
                   name="waktu"
-                  value="14.00"
+                  value="14:00"
                   id="option4"
                 />
                 <label className="btn btn-outline-secondary" for="option4">
@@ -297,7 +316,7 @@ function App() {
                   type="radio"
                   className="btn-check"
                   name="waktu"
-                  value="14.30"
+                  value="14:30"
                   id="option5"
                 />
                 <label className="btn btn-outline-secondary" for="option5">
@@ -308,7 +327,7 @@ function App() {
                   type="radio"
                   className="btn-check"
                   name="waktu"
-                  value="15.00"
+                  value="15:00"
                   id="option6"
                 />
                 <label className="btn btn-outline-secondary" for="option6">
@@ -319,7 +338,7 @@ function App() {
                   type="radio"
                   className="btn-check"
                   name="waktu"
-                  value="15.30"
+                  value="15:30"
                   id="option7"
                 />
                 <label className="btn btn-outline-secondary" for="option7">
@@ -330,7 +349,7 @@ function App() {
                   type="radio"
                   className="btn-check"
                   name="waktu"
-                  value="16.00"
+                  value="16:00"
                   id="option8"
                 />
                 <label className="btn btn-outline-secondary" for="option8">
@@ -345,7 +364,23 @@ function App() {
           <Button variant="secondary" onClick={hideModal}>
             <i class="bi bi-x"> </i> Batal
           </Button>
-          <Button variant="primary" onClick={hideModal}>
+          <Button variant="primary" onClick={showAccModal} disabled={date && time ? false : true}>
+            <i class="bi bi-check2-all"> </i> Simpan
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
+
+      <Modal size="lg" show={shownAccModal} onHide={hideAccModal}>
+        <Modal.Body>
+          <h5>Apakah jadwal appointment yang dimasukkan untuk Angga Yarro sudah benar ?</h5>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={hideAccModal}>
+            <i class="bi bi-x"> </i> Batal
+          </Button>
+          <Button variant="primary" onClick={showAccModal}>
             <i class="bi bi-check2-all"> </i> Simpan
           </Button>
         </Modal.Footer>
