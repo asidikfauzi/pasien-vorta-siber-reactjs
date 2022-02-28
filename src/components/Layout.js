@@ -9,7 +9,7 @@ function Layout({ children }) {
     <main>
       <aside>
         <img src={img} alt="logo"></img>
-        <label class="bi bi-people-fill">User</label>
+        <label className="bi bi-people-fill">User</label>
         <div className="layout-tab">
           <a href="/">Tenaga Medis</a>
           <a href="/" className="active">

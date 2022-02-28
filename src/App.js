@@ -4,25 +4,52 @@ import Layout from "./components/Layout";
 import { useState, useEffect } from "react";
 import moment from "moment";
 import "moment/locale/id";
+import { Modal, Button } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import DatePicker from "sassy-datepicker";
 
 function App() {
   moment.locale("id");
   const [pasienData, setPasienData] = useState([]);
+  const [lokasiData, setLokasiData] = useState([]);
+  const [reload, setReload] = useState(false);
+  const [shownModal, setShownModal] = useState(false);
 
-  const [dropdownShown, setDropdownShown] = useState(false);
+  const onChange = (date) => {
+    console.log(date.toString());
+  }
 
+  const showModal = () => {
+    setShownModal(true);
+  };
+
+  const hideModal = () => {
+    setShownModal(false);
+  };
+
+  
   useEffect(() => {
     axios
       .get("http://localhost:3000/pasien")
       .then((res) => {
-        console.log(res.data.items);
         setPasienData(res.data.items);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [reload]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/lokasi")
+      .then((res) => {
+        setLokasiData(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [reload]);
 
   return (
     <main>
@@ -35,10 +62,10 @@ function App() {
           </div>
           <div>
             <button className="button button-nonaktif me-3">
-              <b class="bi bi-person-dash"></b> Non-Aktifkan
+              <b className="bi bi-person-dash"></b> Non-Aktifkan
             </button>
             <button className="button button-tambah">
-              <b class="bi bi-person-plus"></b> Tambah Pasien
+              <b className="bi bi-person-plus"></b> Tambah Pasien
             </button>
           </div>
         </div>
@@ -67,7 +94,7 @@ function App() {
                 className="input-search"
                 placeholder="Cari nama pasien"
               ></input>
-              <i class="bi bi-search"></i>
+              <i className="bi bi-search"></i>
             </div>
           </div>
           <table className="table-pasien mt-3">
@@ -83,7 +110,7 @@ function App() {
             </tr>
             {pasienData.length > 0 &&
               pasienData.map((pasien, idx) => (
-                <tr showDropdown={dropdownShown}>
+                <tr key={pasien.id}>
                   <td className="check-th">
                     <input type="check" className="check-pasien"></input>
                   </td>
@@ -105,13 +132,13 @@ function App() {
                       <div>
                         {pasien.treatment.length > 0 ? (
                           <>
-                            <p class="bold">
-                              <i class="bi bi-stars color-bi"> </i>
+                            <p className="bold">
+                              <i className="bi bi-stars color-bi"> </i>
                               {pasien.treatment[0].nama}
                             </p>
                             <p>
-                              <i class="bi bi-calendar-week color-bi"> </i>
-                              <span class="bold">
+                              <i className="bi bi-calendar-week color-bi"> </i>
+                              <span className="bold">
                                 {moment(pasien.treatment[0].waktu).format(
                                   " dddd, DD MMM YYYY:"
                                 )}{" "}
@@ -129,28 +156,51 @@ function App() {
                         )}
                       </div>
                       <div className="appointment-dropdown">
-                        <i
-                          onClick={() => setDropdownShown(!dropdownShown)}
-                          className="bi bi-three-dots-vertical icon-dropdown"
-                        ></i>
+                        <i className="bi bi-three-dots-vertical icon-dropdown"></i>
                         <div className="dropdown-content">
-                          <span>
-                            <i class="bi bi-calendar-week"> </i> Ubah
+                          <span onClick={showModal}>
+                            <i className="bi bi-calendar-week"> </i> Ubah
                             Appointment
                           </span>
-                          <span className={pasien.isActive ? "span-nonaktif" : "span-aktif"}>
+                          <span
+                            onClick={() => {
+                              pasien.isActive
+                                ? axios
+                                    .put(
+                                      `http://localhost:3000/pasien/nonaktif/${pasien.id}`
+                                    )
+                                    .then((res) => {
+                                      setReload(!reload);
+                                      console.log(res.data.message);
+                                    })
+                                    .catch((err) => {})
+                                : axios
+                                    .put(
+                                      `http://localhost:3000/pasien/aktif/${pasien.id}`
+                                    )
+                                    .then((res) => {
+                                      setReload(!reload);
+                                      console.log(res.data.message);
+                                    })
+                                    .catch((err) => {});
+                            }}
+                            className={
+                              pasien.isActive ? "span-nonaktif" : "span-aktif"
+                            }
+                          >
                             {pasien.isActive ? (
                               <>
-                                <i class="bi bi-person-dash"></i> Non-Aktifkan
+                                <i className="bi bi-person-dash"></i>{" "}
+                                Non-Aktifkan
                               </>
                             ) : (
                               <>
-                                <i class="bi bi-person-check"></i> Aktifkan
+                                <i className="bi bi-person-check"></i> Aktifkan
                               </>
                             )}
                           </span>
                           <span>
-                            <i class="bi bi-pen-fill"> </i> Ubah Data
+                            <i className="bi bi-pen-fill"> </i> Ubah Data
                           </span>
                         </div>
                       </div>
@@ -161,6 +211,145 @@ function App() {
           </table>
         </div>
       </Layout>
+      <Modal size="lg" show={shownModal} onHide={hideModal}>
+        <Modal.Header>
+          <Modal.Title>Ubah Jadwal Appointment - </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="div-warning">
+            <i className="bi bi-exclamation-circle"></i> Masukkan informasi
+            jadwal appointment baru untuk pasien, Angga Yosa
+          </div>
+          <div className="flex-modal">
+            <div className="left-modal">
+              <b className="mt-3 mb-2">Treatment</b>
+              <select name="example" className="combo-modal">
+                <option value="Eyelash Variant 1">Eyelash Variant 1</option>
+                <option value="Eyelash Variant 2">Eyelash Variant 2</option>
+                <option value="Eyelash Variant 3">Eyelash Variant 3</option>
+                <option value="Eyelash Variant 4">Eyelash Variant 4</option>
+              </select>
+              
+              <DatePicker onChange={onChange}/>
+            </div>
+            <div className="right-modal">
+              <b className="mt-3 mb-3">Lokasi</b>
+              <select name="example" className="combo-modal">
+                {lokasiData.length > 0 &&
+                  lokasiData.map((lokasi, idx) => (
+                    <>
+                      <option value="{lokasi.id}">{lokasi.nama}</option>
+                    </>
+                  ))}
+                ;
+              </select>
+              <b className="mt-3 mb-2">Waktu</b>
+              <form className="waktu">
+                {/* <div role="group">
+                </div> */}
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="waktu"
+                  value="12.30"
+                  id="option1"
+                />
+                <label className="btn btn-outline-secondary" for="option1">
+                  {" "}
+                  12.30
+                </label>
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="waktu"
+                  value="13.00"
+                  id="option2"
+                />
+                <label className="btn btn-outline-secondary" for="option2">
+                  {" "}
+                  13.00
+                </label>
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="waktu"
+                  value="13.30"
+                  id="option3"
+                />
+                <label className="btn btn-outline-secondary" for="option3">
+                  {" "}
+                  13.30
+                </label>
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="waktu"
+                  value="14.00"
+                  id="option4"
+                />
+                <label className="btn btn-outline-secondary" for="option4">
+                  {" "}
+                  14.00
+                </label>
+                {/* <div role="group">
+                </div> */}
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="waktu"
+                  value="14.30"
+                  id="option5"
+                />
+                <label className="btn btn-outline-secondary" for="option5">
+                  {" "}
+                  14.30
+                </label>
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="waktu"
+                  value="15.00"
+                  id="option6"
+                />
+                <label className="btn btn-outline-secondary" for="option6">
+                  {" "}
+                  15.00
+                </label>
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="waktu"
+                  value="15.30"
+                  id="option7"
+                />
+                <label className="btn btn-outline-secondary" for="option7">
+                  {" "}
+                  15.30
+                </label>
+                <input
+                  type="radio"
+                  className="btn-check"
+                  name="waktu"
+                  value="16.00"
+                  id="option8"
+                />
+                <label className="btn btn-outline-secondary" for="option8">
+                  {" "}
+                  16.00
+                </label>
+              </form>
+            </div>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={hideModal}>
+            <i class="bi bi-x"> </i> Batal
+          </Button>
+          <Button variant="primary" onClick={hideModal}>
+            <i class="bi bi-check2-all"> </i> Simpan
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </main>
   );
 }
