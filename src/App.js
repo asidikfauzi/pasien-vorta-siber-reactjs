@@ -41,6 +41,7 @@ function App() {
   const hideModal = () => {
     setDate(null);
     setTime(null);
+    setBody({});
     setShownModal(false);
   };
 
@@ -50,6 +51,18 @@ function App() {
 
   const hideAccModal = () => {
     setShownAccModal(false);
+    setdataFinal({});
+  };
+
+  const updateHandler = () => {
+    axios
+      .put(`http://localhost:3000/treatment/${userData.treatment.id}`, body)
+      .then((res) => {
+        console.log("wakwwww")
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -248,13 +261,19 @@ function App() {
       <Modal size="lg" show={shownModal} onHide={hideModal}>
         <form
           onSubmit={(e) => {
-            e.preventDefault()
+            e.preventDefault();
             setBody({
               ...body,
               nama: e.target.treatment.value,
               waktu: `${date} ${time}`,
               pasien: { id: userData.id },
               lokasi: e.target.lokasi.value,
+            });
+            setdataFinal({
+              nama: body.nama,
+              date: moment(body.waktu).format("dddd, MMM DD YYYY, HH:mm"),
+              lokasi: lokasiData.find((element) => element.id == body.lokasi)
+                .nama,
             });
           }}
         >
@@ -406,21 +425,30 @@ function App() {
       <Modal size="lg" show={shownAccModal} onHide={hideAccModal}>
         <Modal.Body>
           <h5>
-            Apakah jadwal appointment yang dimasukkan untuk Angga Yarro sudah
-            benar ?
+            Apakah jadwal appointment yang dimasukkan untuk {userData.nama}{" "}
+            sudah benar ?
           </h5>
           <div className="flex-acc-modal">
-            <div>
+            <div className="flex-final">
               <i className="bi bi-stars icon-color-acc"> </i>
-              <b>Service</b>
+              <div>
+                <b>Service</b>
+                <p>{dataFinal.nama}</p>
+              </div>
             </div>
-            <div>
+            <div className="flex-final">
               <i className="bi bi-calendar-week icon-color-acc"></i>
-              <b>Date {`&`} Time</b>
+              <div>
+                <b>Date {`&`} Time</b>
+                <p>{dataFinal.date}</p>
+              </div>
             </div>
-            <div>
+            <div className="flex-final">
               <i class="bi bi-geo icon-color-acc"></i>
-              <b>Lokasi</b>
+              <div>
+                <b>Lokasi</b>
+                <p>{dataFinal.lokasi}</p>
+              </div>
             </div>
           </div>
         </Modal.Body>
@@ -428,7 +456,10 @@ function App() {
           <Button variant="secondary" onClick={hideAccModal}>
             <i class="bi bi-x"> </i> Batal
           </Button>
-          <Button variant="primary" onClick={showAccModal}>
+          <Button
+            onClick={updateHandler}
+            variant="primary"
+          >
             <i class="bi bi-check2-all"> </i> Simpan
           </Button>
         </Modal.Footer>

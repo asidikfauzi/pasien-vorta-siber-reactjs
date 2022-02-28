@@ -88,7 +88,7 @@ tr.table-header {
   text-align: center;
 }
 
-.icon-color-acc{
+.icon-color-acc {
   color: #decca6;
 }
 
@@ -215,7 +215,7 @@ i.icon-dropdown {
   width: 100%;
 }
 
-.flex-acc-modal{
+.flex-acc-modal {
   display: flex;
   gap: 1rem;
   justify-content: center;
@@ -230,4 +230,9 @@ i.icon-dropdown {
 
 .sdp {
   width: 100% !important;
+}
+
+.flex-final {
+  display: flex;
+  gap: 0.5rem;
 }
