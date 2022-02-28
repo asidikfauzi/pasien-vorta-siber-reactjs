@@ -8,10 +8,13 @@ import { Modal, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import DatePicker from "sassy-datepicker";
+import { ToastContainer, toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
-function App() {
+function App(props) {
   moment.locale("id");
   const [pasienData, setPasienData] = useState([]);
+  const [meta, setMeta] = useState(null);
   const [lokasiData, setLokasiData] = useState([]);
   const [reload, setReload] = useState(false);
   const [shownModal, setShownModal] = useState(false);
@@ -21,6 +24,9 @@ function App() {
   const [time, setTime] = useState(null);
   const [userData, setUserData] = useState({});
   const [dataFinal, setdataFinal] = useState({});
+
+  const params = new URLSearchParams(window.location.search);
+  let page = params.get("page");
 
   const dateHandler = (date) => {
     const waktu = moment(date).format("YYYY-MM-DD");
@@ -58,7 +64,10 @@ function App() {
     axios
       .put(`http://localhost:3000/treatment/${userData.treatment.id}`, body)
       .then((res) => {
-        console.log("wakwwww")
+        toast.success("Berhasil Ubah Jadwal Appointment!");
+        console.log("success");
+        hideAccModal();
+        hideModal();
       })
       .catch((err) => {
         console.log(err);
@@ -67,9 +76,10 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/pasien")
+      .get(`http://localhost:3000/pasien?page=${page || 1}`)
       .then((res) => {
         setPasienData(res.data.items);
+        setMeta(res.data.meta);
       })
       .catch((err) => {
         console.log(err);
@@ -89,6 +99,17 @@ function App() {
 
   return (
     <main>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover={false}
+      />
       <Layout>
         <div className="search-filter mb-3">
           <div>
@@ -255,6 +276,14 @@ function App() {
                 </tr>
               ))}
           </table>
+          <div className="pagination">
+            <a href="/">
+              <button>1</button>
+            </a>
+            <a href="/?page=2">
+              <button>2</button>
+            </a>
+          </div>
         </div>
       </Layout>
 
@@ -272,8 +301,9 @@ function App() {
             setdataFinal({
               nama: body.nama,
               date: moment(body.waktu).format("dddd, MMM DD YYYY, HH:mm"),
-              lokasi: lokasiData.find((element) => element.id == body.lokasi)
-                .nama,
+              lokasi:
+                lokasiData &&
+                lokasiData.find((element) => element.id == body.lokasi).nama,
             });
           }}
         >
@@ -456,10 +486,7 @@ function App() {
           <Button variant="secondary" onClick={hideAccModal}>
             <i class="bi bi-x"> </i> Batal
           </Button>
-          <Button
-            onClick={updateHandler}
-            variant="primary"
-          >
+          <Button onClick={updateHandler} variant="primary">
             <i class="bi bi-check2-all"> </i> Simpan
           </Button>
         </Modal.Footer>
