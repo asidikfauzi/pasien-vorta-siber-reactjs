@@ -2,14 +2,19 @@ import axios from "axios";
 import "../src/assets/styles/App.css";
 import Layout from "./components/Layout";
 import { useState, useEffect } from "react";
+import moment from "moment";
+import "moment/locale/id";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 function App() {
+  moment.locale("id");
   const [pasienData, setPasienData] = useState([]);
 
   useEffect(() => {
     axios
       .get("http://localhost:3000/pasien")
       .then((res) => {
+        console.log(res.data.items);
         setPasienData(res.data.items);
       })
       .catch((err) => {
@@ -27,16 +32,12 @@ function App() {
             </h4>
           </div>
           <div>
-            <input
-              type="submit"
-              className="button button-nonaktif me-3"
-              value="Non-Aktifkan"
-            ></input>
-            <input
-              type="submit"
-              className="button button-tambah"
-              value="Tambah Pasien"
-            ></input>
+            <button className="button button-nonaktif me-3">
+              <b class="bi bi-person-dash"></b> Non-Aktifkan
+            </button>
+            <button className="button button-tambah">
+              <b class="bi bi-person-plus"></b> Tambah Pasien
+            </button>
           </div>
         </div>
 
@@ -61,9 +62,9 @@ function App() {
             <input
               type="text"
               className="search-pasien"
-              placeholder="Cari nama pasien"
+              placeholder="Cari nama pasien" 
               name="search"
-            ></input>
+            ></input> 
           </div>
           <table className="table-pasien mt-3">
             <tr>
@@ -90,8 +91,20 @@ function App() {
                   <td>{pasien.notelp}</td>
                   <td>-</td>
                   <td>
-                    <p>Eyelash Variant 1</p>
-                    <p>Rabu, 21 Januari 2021 : 14.30 - 15.30</p>
+                    <p>
+                      {pasien.treatment.length > 0
+                        ? pasien.treatment[0].nama
+                        : "-"}
+                    </p>
+                    <p>
+                      {pasien.treatment.length > 0
+                        ? `${moment(pasien.treatment[0].waktu).format(
+                            "dddd, DD MMM YYYY: HH:mm -"
+                          )} ${moment(pasien.treatment[0].waktu)
+                            .add(1, "h")
+                            .format("HH:mm")}`
+                        : `-`}
+                    </p>
                   </td>
                 </tr>
               ))}
