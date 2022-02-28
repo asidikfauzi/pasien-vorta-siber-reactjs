@@ -62,9 +62,9 @@ function App() {
             <input
               type="text"
               className="search-pasien"
-              placeholder="Cari nama pasien" 
+              placeholder="Cari nama pasien"
               name="search"
-            ></input> 
+            ></input>
           </div>
           <table className="table-pasien mt-3">
             <tr>
@@ -92,18 +92,32 @@ function App() {
                   <td>-</td>
                   <td>
                     <p>
-                      {pasien.treatment.length > 0
-                        ? pasien.treatment[0].nama
-                        : "-"}
+                      {pasien.treatment.length > 0 ? (
+                        <>
+                          <i class="bi bi-stars"> </i>
+                          {pasien.treatment[0].nama}
+                        </>
+                      ) : (
+                        "-"
+                      )}
                     </p>
                     <p>
-                      {pasien.treatment.length > 0
-                        ? `${moment(pasien.treatment[0].waktu).format(
-                            "dddd, DD MMM YYYY: HH:mm -"
-                          )} ${moment(pasien.treatment[0].waktu)
+                      {pasien.treatment.length > 0 ? (
+                        <>
+                          <i class="bi bi-calendar-week"> </i>
+                          `$
+                          {moment(pasien.treatment[0].waktu).format(
+                            " dddd, DD MMM YYYY: HH:mm -"
+                          )}{" "}
+                          $
+                          {moment(pasien.treatment[0].waktu)
                             .add(1, "h")
-                            .format("HH:mm")}`
-                        : `-`}
+                            .format("HH:mm")}
+                          `
+                        </>
+                      ) : (
+                        "-"
+                      )}
                     </p>
                   </td>
                 </tr>
