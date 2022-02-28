@@ -10,6 +10,8 @@ function App() {
   moment.locale("id");
   const [pasienData, setPasienData] = useState([]);
 
+  const [dropdownShown, setDropdownShown] = useState(false);
+
   useEffect(() => {
     axios
       .get("http://localhost:3000/pasien")
@@ -59,12 +61,14 @@ function App() {
                 <option value="-">Other</option>
               </select>
             </div>
-            <input
-              type="text"
-              className="search-pasien"
-              placeholder="Cari nama pasien"
-              name="search"
-            ></input>
+            <div className="search-pasien">
+              <input
+                type="text"
+                className="input-search"
+                placeholder="Cari nama pasien"
+              ></input>
+              <i class="bi bi-search"></i>
+            </div>
           </div>
           <table className="table-pasien mt-3">
             <tr className="table-header">
@@ -79,7 +83,7 @@ function App() {
             </tr>
             {pasienData.length > 0 &&
               pasienData.map((pasien, idx) => (
-                <tr>
+                <tr showDropdown={dropdownShown}>
                   <td className="check-th">
                     <input type="check" className="check-pasien"></input>
                   </td>
@@ -97,28 +101,60 @@ function App() {
                   <td>{pasien.notelp}</td>
                   <td>-</td>
                   <td>
-                    {pasien.treatment.length > 0 ? (
-                      <>
-                        <p class="bold">
-                          <i class="bi bi-stars"> </i>
-                          {pasien.treatment[0].nama}
-                        </p>
-                        <p>
-                          <i class="bi bi-calendar-week"> </i>
-                          <span class="bold">
-                            {moment(pasien.treatment[0].waktu).format(
-                              " dddd, DD MMM YYYY:"
-                            )}{" "}
+                    <div className="appointment">
+                      <div>
+                        {pasien.treatment.length > 0 ? (
+                          <>
+                            <p class="bold">
+                              <i class="bi bi-stars color-bi"> </i>
+                              {pasien.treatment[0].nama}
+                            </p>
+                            <p>
+                              <i class="bi bi-calendar-week color-bi"> </i>
+                              <span class="bold">
+                                {moment(pasien.treatment[0].waktu).format(
+                                  " dddd, DD MMM YYYY:"
+                                )}{" "}
+                              </span>
+                              {moment(pasien.treatment[0].waktu).format(
+                                " HH:mm -"
+                              )}{" "}
+                              {moment(pasien.treatment[0].waktu)
+                                .add(1, "h")
+                                .format("HH:mm")}
+                            </p>
+                          </>
+                        ) : (
+                          "-"
+                        )}
+                      </div>
+                      <div className="appointment-dropdown">
+                        <i
+                          onClick={() => setDropdownShown(!dropdownShown)}
+                          className="bi bi-three-dots-vertical icon-dropdown"
+                        ></i>
+                        <div className="dropdown-content">
+                          <span>
+                            <i class="bi bi-calendar-week"> </i> Ubah
+                            Appointment
                           </span>
-                          {moment(pasien.treatment[0].waktu).format(" HH:mm -")}{" "}
-                          {moment(pasien.treatment[0].waktu)
-                            .add(1, "h")
-                            .format("HH:mm")}
-                        </p>
-                      </>
-                    ) : (
-                      "-"
-                    )}
+                          <span className={pasien.isActive ? "span-nonaktif" : "span-aktif"}>
+                            {pasien.isActive ? (
+                              <>
+                                <i class="bi bi-person-dash"></i> Non-Aktifkan
+                              </>
+                            ) : (
+                              <>
+                                <i class="bi bi-person-check"></i> Aktifkan
+                              </>
+                            )}
+                          </span>
+                          <span>
+                            <i class="bi bi-pen-fill"> </i> Ubah Data
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   </td>
                 </tr>
               ))}

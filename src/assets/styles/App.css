@@ -29,13 +29,28 @@
   align-items: center;
 }
 
-.search-pasien {
-  width: 20rem;
-  padding: 0.4rem 0.4rem;
+.search-pasien,
+.input-search {
   font-size: 14px;
   outline: none;
-  border: 1px solid #c0c0c0;
   border-radius: 0.2rem;
+}
+.search-pasien {
+  width: 23rem;
+  border: 1px solid #c0c0c0;
+}
+.input-search {
+  padding: 0.4rem 0.75rem;
+  width: 21rem;
+  border: 0px solid white;
+}
+
+.bi-search {
+  font-size: 18px;
+}
+
+.color-bi{
+  color: #c0c0c0;
 }
 
 .search-pasien:focus {
@@ -52,6 +67,7 @@
   padding: 10px;
   border-right: none;
   border-left: none;
+  height: 90px;
 }
 
 .table-pasien tr {
@@ -98,7 +114,7 @@ tr.table-header {
 }
 
 table p {
-  margin: 0;
+  margin: 0.25rem;
 }
 
 .p-isActive {
@@ -115,4 +131,56 @@ table p {
 
 .bold {
   font-weight: bold;
+}
+
+.appointment {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.appointment-dropdown {
+  position: relative;
+}
+
+i.icon-dropdown {
+  cursor: pointer;
+  color: #decca6;
+}
+/* dropdown */
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: white;
+  min-width: 200px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  padding: 1rem;
+}
+
+.dropdown-content span {
+  cursor: pointer;
+  float: none;
+  padding: 0.5rem 0;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+  font-weight: 400;
+}
+
+.dropdown-content span:hover {
+  background-color: #0000001d;
+}
+
+.appointment-dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.span-nonaktif{
+  color: #dc143c;
+}
+.span-aktif{
+  color: #20b2aa;
 }
