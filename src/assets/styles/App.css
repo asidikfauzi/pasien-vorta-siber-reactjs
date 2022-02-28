@@ -88,6 +88,10 @@ tr.table-header {
   text-align: center;
 }
 
+.icon-color-acc{
+  color: #decca6;
+}
+
 .check-pasien {
   height: 1rem;
   width: 1rem;
@@ -209,6 +213,13 @@ i.icon-dropdown {
   border: 1px solid #c0c0c0;
   border-radius: 0.2rem;
   width: 100%;
+}
+
+.flex-acc-modal{
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .waktu {

@@ -37,6 +37,8 @@ function App() {
   };
 
   const hideModal = () => {
+    setDate(null);
+    setTime(null);
     setShownModal(false);
   };
 
@@ -177,7 +179,17 @@ function App() {
                       <div className="appointment-dropdown">
                         <i className="bi bi-three-dots-vertical icon-dropdown"></i>
                         <div className="dropdown-content">
-                          <span onClick={showModal}>
+                          <span
+                            onClick={() => {
+                              showModal();
+                              setBody({
+                                ...body,
+                                id: pasien.id,
+                                nama: pasien.nama,
+                                treatment: pasien.treatment[0],
+                              });
+                            }}
+                          >
                             <i className="bi bi-calendar-week"> </i> Ubah
                             Appointment
                           </span>
@@ -230,19 +242,24 @@ function App() {
           </table>
         </div>
       </Layout>
+
       <Modal size="lg" show={shownModal} onHide={hideModal}>
         <Modal.Header>
-          <Modal.Title>Ubah Jadwal Appointment - </Modal.Title>
+          <Modal.Title>
+            Ubah Jadwal Appointment - {body.nama}
+            <label name="namamodal" placeholder="aaaa"></label>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="div-warning">
             <i className="bi bi-exclamation-circle"></i> Masukkan informasi
-            jadwal appointment baru untuk pasien, Angga Yosa
+            jadwal appointment baru untuk pasien, {body.nama}
           </div>
           <div className="flex-modal">
             <div className="left-modal">
               <b className="mt-3 mb-2">Treatment</b>
               <select name="example" className="combo-modal">
+                <option value={body.treatment.nama} selected hidden disabled>{body.treatment.nama}</option>
                 <option value="Eyelash Variant 1">Eyelash Variant 1</option>
                 <option value="Eyelash Variant 2">Eyelash Variant 2</option>
                 <option value="Eyelash Variant 3">Eyelash Variant 3</option>
@@ -257,15 +274,13 @@ function App() {
                 {lokasiData.length > 0 &&
                   lokasiData.map((lokasi, idx) => (
                     <>
-                      <option value="{lokasi.id}">{lokasi.nama}</option>
+                      <option value={lokasi.id}>{lokasi.nama}</option>
                     </>
                   ))}
                 ;
               </select>
               <b className="mt-3 mb-2">Waktu</b>
               <form onChange={timeHandler} className="waktu">
-                {/* <div role="group">
-                </div> */}
                 <input
                   type="radio"
                   className="btn-check"
@@ -274,7 +289,6 @@ function App() {
                   id="option1"
                 />
                 <label className="btn btn-outline-secondary" for="option1">
-                  {" "}
                   12.30
                 </label>
                 <input
@@ -285,7 +299,6 @@ function App() {
                   id="option2"
                 />
                 <label className="btn btn-outline-secondary" for="option2">
-                  {" "}
                   13.00
                 </label>
                 <input
@@ -296,7 +309,6 @@ function App() {
                   id="option3"
                 />
                 <label className="btn btn-outline-secondary" for="option3">
-                  {" "}
                   13.30
                 </label>
                 <input
@@ -307,11 +319,8 @@ function App() {
                   id="option4"
                 />
                 <label className="btn btn-outline-secondary" for="option4">
-                  {" "}
                   14.00
                 </label>
-                {/* <div role="group">
-                </div> */}
                 <input
                   type="radio"
                   className="btn-check"
@@ -320,7 +329,6 @@ function App() {
                   id="option5"
                 />
                 <label className="btn btn-outline-secondary" for="option5">
-                  {" "}
                   14.30
                 </label>
                 <input
@@ -331,7 +339,6 @@ function App() {
                   id="option6"
                 />
                 <label className="btn btn-outline-secondary" for="option6">
-                  {" "}
                   15.00
                 </label>
                 <input
@@ -342,7 +349,6 @@ function App() {
                   id="option7"
                 />
                 <label className="btn btn-outline-secondary" for="option7">
-                  {" "}
                   15.30
                 </label>
                 <input
@@ -353,7 +359,6 @@ function App() {
                   id="option8"
                 />
                 <label className="btn btn-outline-secondary" for="option8">
-                  {" "}
                   16.00
                 </label>
               </form>
@@ -364,17 +369,36 @@ function App() {
           <Button variant="secondary" onClick={hideModal}>
             <i class="bi bi-x"> </i> Batal
           </Button>
-          <Button variant="primary" onClick={showAccModal} disabled={date && time ? false : true}>
+          <Button
+            variant="primary"
+            onClick={showAccModal}
+            disabled={date && time ? false : true}
+          >
             <i class="bi bi-check2-all"> </i> Simpan
           </Button>
         </Modal.Footer>
       </Modal>
 
-
-
       <Modal size="lg" show={shownAccModal} onHide={hideAccModal}>
         <Modal.Body>
-          <h5>Apakah jadwal appointment yang dimasukkan untuk Angga Yarro sudah benar ?</h5>
+          <h5>
+            Apakah jadwal appointment yang dimasukkan untuk Angga Yarro sudah
+            benar ?
+          </h5>
+          <div className="flex-acc-modal">
+            <div>
+              <i className="bi bi-stars icon-color-acc"> </i>
+              <b>Service</b>
+            </div>
+            <div>
+              <i className="bi bi-calendar-week icon-color-acc"></i>
+              <b>Date {`&`} Time</b>
+            </div>
+            <div>
+              <i class="bi bi-geo icon-color-acc"></i>
+              <b>Lokasi</b>
+            </div>
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={hideAccModal}>
