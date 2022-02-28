@@ -19,6 +19,8 @@ function App() {
   const [body, setBody] = useState({});
   const [date, setDate] = useState(null);
   const [time, setTime] = useState(null);
+  const [userData, setUserData] = useState({});
+  const [dataFinal, setdataFinal] = useState({});
 
   const dateHandler = (date) => {
     const waktu = moment(date).format("YYYY-MM-DD");
@@ -182,8 +184,8 @@ function App() {
                           <span
                             onClick={() => {
                               showModal();
-                              setBody({
-                                ...body,
+                              setUserData({
+                                ...userData,
                                 id: pasien.id,
                                 nama: pasien.nama,
                                 treatment: pasien.treatment[0],
@@ -244,139 +246,161 @@ function App() {
       </Layout>
 
       <Modal size="lg" show={shownModal} onHide={hideModal}>
-        <Modal.Header>
-          <Modal.Title>
-            Ubah Jadwal Appointment - {body.nama}
-            <label name="namamodal" placeholder="aaaa"></label>
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="div-warning">
-            <i className="bi bi-exclamation-circle"></i> Masukkan informasi
-            jadwal appointment baru untuk pasien, {body.nama}
-          </div>
-          <div className="flex-modal">
-            <div className="left-modal">
-              <b className="mt-3 mb-2">Treatment</b>
-              <select name="example" className="combo-modal">
-                <option value={body.treatment.nama} selected hidden disabled>{body.treatment.nama}</option>
-                <option value="Eyelash Variant 1">Eyelash Variant 1</option>
-                <option value="Eyelash Variant 2">Eyelash Variant 2</option>
-                <option value="Eyelash Variant 3">Eyelash Variant 3</option>
-                <option value="Eyelash Variant 4">Eyelash Variant 4</option>
-              </select>
-              <b className="mt-3 mb-2">Tanggal </b>
-              <DatePicker onChange={dateHandler} />
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            setBody({
+              ...body,
+              nama: e.target.treatment.value,
+              waktu: `${date} ${time}`,
+              pasien: { id: userData.id },
+              lokasi: e.target.lokasi.value,
+            });
+          }}
+        >
+          <Modal.Header>
+            <Modal.Title>
+              Ubah Jadwal Appointment - {userData.nama}
+              <label name="namamodal" placeholder="aaaa"></label>
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="div-warning">
+              <i className="bi bi-exclamation-circle"></i> Masukkan informasi
+              jadwal appointment baru untuk pasien, {userData.nama}
             </div>
-            <div className="right-modal">
-              <b className="mt-3 mb-2">Lokasi</b>
-              <select name="example" className="combo-modal">
-                {lokasiData.length > 0 &&
-                  lokasiData.map((lokasi, idx) => (
-                    <>
-                      <option value={lokasi.id}>{lokasi.nama}</option>
-                    </>
-                  ))}
-                ;
-              </select>
-              <b className="mt-3 mb-2">Waktu</b>
-              <form onChange={timeHandler} className="waktu">
-                <input
-                  type="radio"
-                  className="btn-check"
-                  name="waktu"
-                  value="12:30"
-                  id="option1"
-                />
-                <label className="btn btn-outline-secondary" for="option1">
-                  12.30
-                </label>
-                <input
-                  type="radio"
-                  className="btn-check"
-                  name="waktu"
-                  value="13:00"
-                  id="option2"
-                />
-                <label className="btn btn-outline-secondary" for="option2">
-                  13.00
-                </label>
-                <input
-                  type="radio"
-                  className="btn-check"
-                  name="waktu"
-                  value="13:30"
-                  id="option3"
-                />
-                <label className="btn btn-outline-secondary" for="option3">
-                  13.30
-                </label>
-                <input
-                  type="radio"
-                  className="btn-check"
-                  name="waktu"
-                  value="14:00"
-                  id="option4"
-                />
-                <label className="btn btn-outline-secondary" for="option4">
-                  14.00
-                </label>
-                <input
-                  type="radio"
-                  className="btn-check"
-                  name="waktu"
-                  value="14:30"
-                  id="option5"
-                />
-                <label className="btn btn-outline-secondary" for="option5">
-                  14.30
-                </label>
-                <input
-                  type="radio"
-                  className="btn-check"
-                  name="waktu"
-                  value="15:00"
-                  id="option6"
-                />
-                <label className="btn btn-outline-secondary" for="option6">
-                  15.00
-                </label>
-                <input
-                  type="radio"
-                  className="btn-check"
-                  name="waktu"
-                  value="15:30"
-                  id="option7"
-                />
-                <label className="btn btn-outline-secondary" for="option7">
-                  15.30
-                </label>
-                <input
-                  type="radio"
-                  className="btn-check"
-                  name="waktu"
-                  value="16:00"
-                  id="option8"
-                />
-                <label className="btn btn-outline-secondary" for="option8">
-                  16.00
-                </label>
-              </form>
+            <div className="flex-modal">
+              <div className="left-modal">
+                <b className="mt-3 mb-2">Treatment</b>
+
+                <select name="treatment" className="combo-modal">
+                  <option
+                    value={userData.treatment && userData.treatment.nama}
+                    selected
+                    hidden
+                    disabled
+                  >
+                    {userData.treatment && userData.treatment.nama}
+                  </option>
+                  <option value="Eyelash Variant 1">Eyelash Variant 1</option>
+                  <option value="Eyelash Variant 2">Eyelash Variant 2</option>
+                  <option value="Eyelash Variant 3">Eyelash Variant 3</option>
+                  <option value="Eyelash Variant 4">Eyelash Variant 4</option>
+                </select>
+                <b className="mt-3 mb-2">Tanggal </b>
+                <DatePicker onChange={dateHandler} />
+              </div>
+              <div className="right-modal">
+                <b className="mt-3 mb-2">Lokasi</b>
+                <select name="lokasi" className="combo-modal">
+                  {lokasiData.length > 0 &&
+                    lokasiData.map((lokasi, idx) => (
+                      <>
+                        <option value={lokasi.id}>{lokasi.nama}</option>
+                      </>
+                    ))}
+                  ;
+                </select>
+                <b className="mt-3 mb-2">Waktu</b>
+                <form onChange={timeHandler} className="waktu">
+                  <input
+                    type="radio"
+                    className="btn-check"
+                    name="waktu"
+                    value="12:30"
+                    id="option1"
+                  />
+                  <label className="btn btn-outline-secondary" for="option1">
+                    12.30
+                  </label>
+                  <input
+                    type="radio"
+                    className="btn-check"
+                    name="waktu"
+                    value="13:00"
+                    id="option2"
+                  />
+                  <label className="btn btn-outline-secondary" for="option2">
+                    13.00
+                  </label>
+                  <input
+                    type="radio"
+                    className="btn-check"
+                    name="waktu"
+                    value="13:30"
+                    id="option3"
+                  />
+                  <label className="btn btn-outline-secondary" for="option3">
+                    13.30
+                  </label>
+                  <input
+                    type="radio"
+                    className="btn-check"
+                    name="waktu"
+                    value="14:00"
+                    id="option4"
+                  />
+                  <label className="btn btn-outline-secondary" for="option4">
+                    14.00
+                  </label>
+                  <input
+                    type="radio"
+                    className="btn-check"
+                    name="waktu"
+                    value="14:30"
+                    id="option5"
+                  />
+                  <label className="btn btn-outline-secondary" for="option5">
+                    14.30
+                  </label>
+                  <input
+                    type="radio"
+                    className="btn-check"
+                    name="waktu"
+                    value="15:00"
+                    id="option6"
+                  />
+                  <label className="btn btn-outline-secondary" for="option6">
+                    15.00
+                  </label>
+                  <input
+                    type="radio"
+                    className="btn-check"
+                    name="waktu"
+                    value="15:30"
+                    id="option7"
+                  />
+                  <label className="btn btn-outline-secondary" for="option7">
+                    15.30
+                  </label>
+                  <input
+                    type="radio"
+                    className="btn-check"
+                    name="waktu"
+                    value="16:00"
+                    id="option8"
+                  />
+                  <label className="btn btn-outline-secondary" for="option8">
+                    16.00
+                  </label>
+                </form>
+              </div>
             </div>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={hideModal}>
-            <i class="bi bi-x"> </i> Batal
-          </Button>
-          <Button
-            variant="primary"
-            onClick={showAccModal}
-            disabled={date && time ? false : true}
-          >
-            <i class="bi bi-check2-all"> </i> Simpan
-          </Button>
-        </Modal.Footer>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={hideModal}>
+              <i class="bi bi-x"> </i> Batal
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              onClick={showAccModal}
+              disabled={date && time ? false : true}
+            >
+              <i class="bi bi-check2-all"> </i> Simpan
+            </Button>
+          </Modal.Footer>
+        </form>
       </Modal>
 
       <Modal size="lg" show={shownAccModal} onHide={hideAccModal}>
