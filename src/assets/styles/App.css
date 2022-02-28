@@ -3,12 +3,13 @@
   height: 100%;
   padding: 1.5rem;
 }
-.combo-status, .combo-urutan {
-  padding: 0.40rem 0.40rem;
+.combo-status,
+.combo-urutan {
+  padding: 0.4rem 0.4rem;
   color: black;
   outline: none;
-  border: 1px solid #C0C0C0;
-  border-radius: 0.20rem;
+  border: 1px solid #c0c0c0;
+  border-radius: 0.2rem;
 }
 .combo-status {
   width: 10rem;
@@ -17,7 +18,8 @@
   width: 11rem;
 }
 
-.combo-status,.combo-urutan:focus{
+.combo-status,
+.combo-urutan:focus {
   outline: none;
 }
 
@@ -29,31 +31,43 @@
 
 .search-pasien {
   width: 20rem;
-  padding: 0.40rem 0.40rem;
+  padding: 0.4rem 0.4rem;
   font-size: 14px;
   outline: none;
-  border: 1px solid #C0C0C0;
-  border-radius: 0.20rem;
+  border: 1px solid #c0c0c0;
+  border-radius: 0.2rem;
 }
 
-.search-pasien:focus{
+.search-pasien:focus {
   outline: none;
 }
 
 .table-pasien {
   border-collapse: collapse;
   width: 100%;
+  /* border: 1px solid #ddd; */
 }
 .table-pasien td {
   border: 1px solid #ddd;
   padding: 10px;
+  border-right: none;
+  border-left: none;
 }
-.table-pasien th {
 
+.table-pasien tr {
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}
+
+.table-pasien th {
   padding: 10px;
   background-color: white;
-  
 }
+
+tr.table-header {
+  border: none;
+}
+
 .check-th {
   text-align: center;
 }
@@ -67,18 +81,34 @@
 .button {
   width: 10rem;
   font-weight: bold;
-  padding: 0.40rem 0.40rem;
+  padding: 0.4rem 0.4rem;
   border-radius: 0.5rem;
 }
 
 .button-nonaktif {
-  background-color: white; 
-  color: #DC143C; 
+  background-color: white;
+  color: #dc143c;
   border: 2px solid #f44336;
 }
 
 .button-tambah {
-  background-color: #20B2AA; 
-  color: white; 
-  border: 2px solid #20B2AA;
+  background-color: #20b2aa;
+  color: white;
+  border: 2px solid #20b2aa;
+}
+
+table p {
+  margin: 0;
+}
+
+.p-isActive {
+  font-size: 13px;
+}
+
+.p-isActive.p-active {
+  color: #decca6;
+}
+
+.p-isActive.p-nonactive {
+  color: #bbb;
 }

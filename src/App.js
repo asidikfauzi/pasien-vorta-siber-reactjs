@@ -67,7 +67,7 @@ function App() {
             ></input>
           </div>
           <table className="table-pasien mt-3">
-            <tr>
+            <tr className="table-header">
               <th className="check-th">
                 <input type="check" className="check-pasien"></input>
               </th>
@@ -85,13 +85,38 @@ function App() {
                   </td>
                   <td>
                     <p>{pasien.nama}</p>
-                    <p>{pasien.isActive ? "Aktif" : "Nonaktif"}</p>
+                    <p
+                      className={`p-isActive ${
+                        pasien.isActive ? "p-active" : "p-nonactive"
+                      }`}
+                    >
+                      {pasien.isActive ? "Aktif" : "Non-Aktif"}
+                    </p>
                   </td>
                   <td>{pasien.id}</td>
                   <td>{pasien.notelp}</td>
                   <td>-</td>
                   <td>
-                    <p>
+                    {pasien.treatment.length > 0 ? (
+                      <>
+                        <p>
+                          <i class="bi bi-stars"> </i>
+                          {pasien.treatment[0].nama}
+                        </p>
+                        <p>
+                          <i class="bi bi-calendar-week"> </i>
+                          {moment(pasien.treatment[0].waktu).format(
+                            " dddd, DD MMM YYYY: HH:mm -"
+                          )}{" "}
+                          {moment(pasien.treatment[0].waktu)
+                            .add(1, "h")
+                            .format("HH:mm")}
+                        </p>
+                      </>
+                    ) : (
+                      "-"
+                    )}
+                    {/* <p>
                       {pasien.treatment.length > 0 ? (
                         <>
                           <i class="bi bi-stars"> </i>
@@ -105,20 +130,17 @@ function App() {
                       {pasien.treatment.length > 0 ? (
                         <>
                           <i class="bi bi-calendar-week"> </i>
-                          `$
                           {moment(pasien.treatment[0].waktu).format(
                             " dddd, DD MMM YYYY: HH:mm -"
                           )}{" "}
-                          $
                           {moment(pasien.treatment[0].waktu)
                             .add(1, "h")
                             .format("HH:mm")}
-                          `
                         </>
                       ) : (
                         "-"
                       )}
-                    </p>
+                    </p> */}
                   </td>
                 </tr>
               ))}
