@@ -99,15 +99,18 @@ function App() {
                   <td>
                     {pasien.treatment.length > 0 ? (
                       <>
-                        <p>
+                        <p class="bold">
                           <i class="bi bi-stars"> </i>
                           {pasien.treatment[0].nama}
                         </p>
                         <p>
                           <i class="bi bi-calendar-week"> </i>
-                          {moment(pasien.treatment[0].waktu).format(
-                            " dddd, DD MMM YYYY: HH:mm -"
-                          )}{" "}
+                          <span class="bold">
+                            {moment(pasien.treatment[0].waktu).format(
+                              " dddd, DD MMM YYYY:"
+                            )}{" "}
+                          </span>
+                          {moment(pasien.treatment[0].waktu).format(" HH:mm -")}{" "}
                           {moment(pasien.treatment[0].waktu)
                             .add(1, "h")
                             .format("HH:mm")}
@@ -116,31 +119,6 @@ function App() {
                     ) : (
                       "-"
                     )}
-                    {/* <p>
-                      {pasien.treatment.length > 0 ? (
-                        <>
-                          <i class="bi bi-stars"> </i>
-                          {pasien.treatment[0].nama}
-                        </>
-                      ) : (
-                        "-"
-                      )}
-                    </p>
-                    <p>
-                      {pasien.treatment.length > 0 ? (
-                        <>
-                          <i class="bi bi-calendar-week"> </i>
-                          {moment(pasien.treatment[0].waktu).format(
-                            " dddd, DD MMM YYYY: HH:mm -"
-                          )}{" "}
-                          {moment(pasien.treatment[0].waktu)
-                            .add(1, "h")
-                            .format("HH:mm")}
-                        </>
-                      ) : (
-                        "-"
-                      )}
-                    </p> */}
                   </td>
                 </tr>
               ))}

@@ -112,3 +112,7 @@ table p {
 .p-isActive.p-nonactive {
   color: #bbb;
 }
+
+.bold {
+  font-weight: bold;
+}
